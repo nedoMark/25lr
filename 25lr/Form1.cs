@@ -9,6 +9,7 @@ namespace _25lr
     public partial class Form1 : Form
     {
         private OleDbConnection connection;
+        //ТУТ ШЛЯХ ДО НАШОЇ БАЗИ ДАННИХ
         private string dbPath = @"C:\Users\pppii\source\repos\25lr\25lr\25lr_database.accdb";
 
         public Form1()
@@ -43,18 +44,15 @@ namespace _25lr
             {
                 connection.Open();
 
-                // Виправлений SQL-запит з явним вказівкам типів даних
                 string query = "INSERT INTO Consumers ([FirstName], [LastName], [MiddleName], [Address], " +
                               "[Phone], [Email], [Password], [RegistrationDate], [IsActive]) " +
                               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 using (OleDbCommand command = new OleDbCommand(query, connection))
                 {
-                    // Додавання параметрів з явним вказівкам типів даних
                     command.Parameters.Add("@FirstName", OleDbType.VarWChar).Value = firstNameTextBox.Text;
                     command.Parameters.Add("@LastName", OleDbType.VarWChar).Value = lastNameTextBox.Text;
 
-                    // Обробка пустих значень для необов'язкових полів
                     command.Parameters.Add("@MiddleName", OleDbType.VarWChar).Value =
                         string.IsNullOrWhiteSpace(middleNameTextBox.Text) ? DBNull.Value : (object)middleNameTextBox.Text;
 
@@ -167,7 +165,6 @@ namespace _25lr
 
         private string HashPassword(string password)
         {
-            // Проста реалізація хешування - у реальному додатку використовуйте більш безпечні методи
             using (var sha256 = System.Security.Cryptography.SHA256.Create())
             {
                 var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
